@@ -1,165 +1,888 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mercado Fastastico</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LootRealm — Reliquias de Mundos Ficticios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-```
-<style>
-    *{
-        margin:0;
-        padding:0;
-        box-sizing:border-box;
-        font-family:Arial, sans-serif;
+    :root {
+      --gold: #c9a84c;
+      --gold-dim: #c9a84c44;
+      --gold-hover: #f0d98c;
+      --bg: #0a0a12;
+      --bg2: #0f0f1a;
+      --bg3: #16162a;
+      --bg4: #1a1a2e;
+      --text: #e8e6e1;
+      --muted: #888;
+      --border: #c9a84c33;
     }
 
-    body{
-        background-color:#f4f4f4;
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
 
-    header{
-        background:#222;
-        color:white;
-        text-align:center;
-        padding:20px;
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #0a0a12ee;
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
     }
 
-    nav{
-        background:#333;
-        padding:10px;
-        text-align:center;
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--text); }
+
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
     }
 
-    nav a{
-        color:white;
-        text-decoration:none;
-        margin:0 15px;
+    .nav-links a {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 2px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--gold);
+      background: var(--gold-dim);
     }
 
-    .productos{
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-        gap:20px;
-        padding:30px;
+    .nav-cart {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      cursor: pointer;
+      padding: 6px 14px;
+      border: 1px solid var(--gold-dim);
+      border-radius: 2px;
+      background: transparent;
+      transition: background 0.2s;
+    }
+    .nav-cart:hover { background: var(--gold-dim); }
+
+    /* ── PAGES ────────────────────────────────────────────── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(90deg, transparent 0, transparent 39px, #c9a84c06 39px, #c9a84c06 40px),
+        repeating-linear-gradient(0deg,  transparent 0, transparent 39px, #c9a84c06 39px, #c9a84c06 40px);
+    }
+    .hero-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+    .hero h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--text);
+      position: relative;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--gold);
+    }
+    .hero p {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+      position: relative;
+    }
+    .hero-cta {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 12px 32px;
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      font-weight: 700;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .hero-cta:hover { background: var(--gold-hover); }
+
+    /* ── FILTER BAR ───────────────────────────────────────── */
+    .filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      padding: 1.5rem 2rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .filter-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border: 1px solid #333;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .filter-btn.active { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+
+    /* ── PRODUCTS ─────────────────────────────────────────── */
+    .products-section { padding: 2rem; }
+
+    .section-label {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
     }
 
-    .card{
-        background:white;
-        border-radius:10px;
-        box-shadow:0 2px 8px rgba(0,0,0,0.2);
-        overflow:hidden;
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
     }
 
-    .card img{
-        width:100%;
-        height:250px;
-        object-fit:cover;
+    .product-card {
+      background: var(--bg2);
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .product-card:hover { background: var(--bg3); }
+
+    .universe-tag {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-family: 'Cinzel', serif;
+      padding: 3px 8px;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+      width: fit-content;
+    }
+    .tag-l4d     { background: #3a0a0a; color: #ff8888; border: 1px solid #ff888844; }
+    .tag-hl      { background: #0a1a0a; color: #7ec87e; border: 1px solid #7ec87e44; }
+    .tag-re      { background: #1a0f0a; color: #f0a050; border: 1px solid #f0a05044; }
+    .tag-zelda   { background: #1a1a0a; color: #e8d060; border: 1px solid #e8d06044; }
+    .tag-witcher { background: #0a0a1a; color: #a080e8; border: 1px solid #a080e844; }
+    .tag-dark    { background: #0e0a06; color: #cc8844; border: 1px solid #cc884444; }
+
+    /* ── IMAGE AREA ───────────────────────────────────────── */
+    .product-img-wrap {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #111120;
+      border: 1px dashed #333;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .product-img-placeholder {
+      font-size: 40px;
+      line-height: 1;
+      user-select: none;
+    }
+    /* upload overlay visible only on first card */
+    .img-upload-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      background: #111120cc;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .product-card:hover .img-upload-label { opacity: 1; }
+    .img-upload-label span {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .img-upload-label svg { color: var(--gold); }
+    #img-file-input { display: none; }
+
+    .product-name {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      line-height: 1.35;
+    }
+    .product-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.55;
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    .product-price {
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gold);
+    }
+    .stock {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .stock-ok  { color: #7ec87e; }
+    .stock-low { color: #f0a050; }
+
+    .add-btn {
+      width: 100%;
+      padding: 8px;
+      background: transparent;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .add-btn:hover { background: var(--gold-dim); border-color: var(--gold); }
+    .add-btn.added { background: var(--gold-dim); color: var(--gold-hover); }
+
+    /* ── CART SIDEBAR ─────────────────────────────────────── */
+    .cart-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #00000088;
+      z-index: 200;
+    }
+    .cart-overlay.open { display: block; }
+
+    .cart-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: min(380px, 100vw);
+      background: var(--bg4);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 201;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    .cart-panel.open { transform: translateX(0); }
+
+    .cart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .cart-close {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px;
+    }
+    .cart-close:hover { color: var(--text); }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 1.5rem;
+    }
+    .cart-empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3rem;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.1em;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #ffffff0a;
+      gap: 1rem;
+    }
+    .cart-item-name { font-size: 13px; color: var(--text); flex: 1; }
+    .cart-item-price { font-family: 'Cinzel', serif; font-size: 13px; color: var(--gold); white-space: nowrap; }
+    .cart-item-remove {
+      background: none; border: none; color: #555; cursor: pointer; font-size: 16px; line-height: 1;
+    }
+    .cart-item-remove:hover { color: #ff8888; }
+
+    .cart-footer {
+      padding: 1.25rem 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .cart-total-label {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .cart-total-amount {
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .checkout-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+    .checkout-btn:hover { background: var(--gold-hover); }
+
+    /* ── CONTACT PAGE ─────────────────────────────────────── */
+    .contact-page {
+      max-width: 600px;
+      margin: 5rem auto;
+      padding: 0 2rem;
+      text-align: center;
+    }
+    .contact-page h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.75rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .contact-page p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: left;
+    }
+    .contact-form label {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid #333;
+      color: var(--text);
+      padding: 10px 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus { border-color: var(--gold-dim); }
+    .contact-form textarea { min-height: 100px; }
+    .contact-submit {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 11px;
+      background: transparent;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      cursor: not-allowed;
+      border-radius: 2px;
+      opacity: 0.5;
+    }
+    .coming-soon-note {
+      font-size: 11px;
+      color: #555;
+      text-align: center;
+      margin-top: 0.5rem;
+      letter-spacing: 0.1em;
     }
 
-    .card-content{
-        padding:15px;
+    /* ── STICKY CART BAR ──────────────────────────────────── */
+    .sticky-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--bg4);
+      border-top: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
     }
-
-    .card h3{
-        margin-bottom:10px;
+    .sticky-info {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
     }
-
-    .precio{
-        color:green;
-        font-size:1.2rem;
-        font-weight:bold;
+    .sticky-info strong { color: var(--gold); }
+    .sticky-open-cart {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      background: transparent;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.2s;
     }
+    .sticky-open-cart:hover { background: var(--gold-dim); }
 
-    button{
-        width:100%;
-        padding:10px;
-        margin-top:10px;
-        background:#0078d7;
-        color:white;
-        border:none;
-        cursor:pointer;
+    /* responsive */
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .nav-links { display: none; }
+      .hero { padding: 3rem 1rem 2.5rem; }
+      .filter-bar, .products-section { padding: 1rem; }
+      .products-grid { grid-template-columns: 1fr 1fr; }
     }
-
-    button:hover{
-        background:#005fa3;
-    }
-
-    footer{
-        background:#222;
-        color:white;
-        text-align:center;
-        padding:15px;
-        margin-top:20px;
-    }
-</style>
-```
-
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>Fantasy Market</h1>
-    <p>Objetos legendarios de videojuegos y mundos ficticios</p>
-</header>
-
+<!-- NAV -->
 <nav>
-    <a href="#">Inicio</a>
-    <a href="#">Productos</a>
-    <a href="#">Ofertas</a>
-    <a href="#">Contacto</a>
+  <a class="nav-logo" href="#" onclick="showPage('shop')">Loot<span>Realm</span></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('shop')" id="nav-shop" class="active">Tienda</a></li>
+    <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contacto</a></li>
+  </ul>
+  <button class="nav-cart" onclick="openCart()">
+    🛒 Carrito (<span id="cart-count-nav">0</span>)
+  </button>
 </nav>
 
-<section class="productos">
+<!-- ════════ PAGE: SHOP ════════ -->
+<div id="page-shop" class="page active">
 
-```
-<div class="card">
-    <img src="https://via.placeholder.com/300x250" alt="Boina de Bill">
-    <div class="card-content">
-        <h3>Boina de Bill</h3>
-        <p>Accesorio inspirado en Left 4 Dead.</p>
-        <p class="precio">$49.99</p>
-        <button>Agregar al carrito</button>
+  <section class="hero">
+    <div class="hero-eyebrow">Mundos ficticios · Gaming · Fantasía</div>
+    <h1>Las reliquias más<br><em>legendarias</em> del multiverso</h1>
+    <p>Réplicas de colección auténticas de tus universos favoritos. Desde los pasillos de Black Mesa hasta los caminos de Hyrule.</p>
+    <button class="hero-cta" onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'})">
+      Explorar artefactos
+    </button>
+  </section>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterProducts('all', this)">Todos</button>
+    <button class="filter-btn" onclick="filterProducts('l4d', this)">Left 4 Dead</button>
+    <button class="filter-btn" onclick="filterProducts('hl', this)">Half-Life</button>
+    <button class="filter-btn" onclick="filterProducts('re', this)">Resident Evil</button>
+    <button class="filter-btn" onclick="filterProducts('witcher', this)">The Witcher</button>
+    <button class="filter-btn" onclick="filterProducts('zelda', this)">Zelda</button>
+    <button class="filter-btn" onclick="filterProducts('dark', this)">Dark Souls</button>
+  </div>
+
+  <section class="products-section">
+    <div class="section-label">Artefactos disponibles</div>
+
+    <div class="products-grid" id="products-grid">
+
+      <!-- Producto 1 — con soporte de imagen -->
+      <div class="product-card" data-universe="l4d">
+        <div class="universe-tag tag-l4d">Left 4 Dead</div>
+        <div class="product-img-wrap" id="main-img-wrap">
+          <span class="product-img-placeholder" id="main-placeholder">🎩</span>
+          <label class="img-upload-label" for="img-file-input" title="Subir imagen">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Subir imagen</span>
+          </label>
+          <input type="file" id="img-file-input" accept="image/*" onchange="loadProductImage(event)" />
+        </div>
+        <div class="product-name">Boina de Bill Overbeck</div>
+        <div class="product-desc">Réplica de la inconfundible boina del veterano de Vietnam. Acabado envejecido auténtico, talla única ajustable.</div>
+        <div class="product-footer">
+          <div class="product-price">$129.99</div>
+          <div class="stock stock-ok">En stock</div>
+        </div>
+        <button class="add-btn" onclick="addToCart('Boina de Bill Overbeck', 129.99, this)">+ Agregar al carrito</button>
+      </div>
+
+      <!-- Producto 2 -->
+      <div class="product-card" data-universe="hl">
+        <div class="universe-tag tag-hl">Half-Life</div>
+        <div class="product-img-wrap"><span class="product-img-placeholder">🔧</span></div>
+        <div class="product-name">Palanca de Gordon Freeman</div>
+        <div class="product-desc">Réplica de acero inoxidable de 1.5 kg. El arma más icónica del físico más peligroso del mundo.</div>
+        <div class="product-footer">
+          <div class="product-price">$89.99</div>
+          <div class="stock stock-low">Pocas unidades</div>
+        </div>
+        <button class="add-btn" onclick="addToCart('Palanca de Gordon Freeman', 89.99, this)">+ Agregar al carrito</button>
+      </div>
+
+      <!-- Producto 3 -->
+      <div class="product-card" data-universe="hl">
+        <div class="universe-tag tag-hl">Half-Life</div>
+        <div class="product-img-wrap"><span class="product-img-placeholder">🦺</span></div>
+        <div class="product-name">Traje HEV Mark IV</div>
+        <div class="product-desc">Réplica wearable del Hazardous Environment suit con luces LED y efectos de sonido originales.</div>
+        <div class="product-footer">
+          <div class="product-price">$2,499.00</div>
+          <div class="stock stock-low">2 disponibles</div>
+        </div>
+        <button class="add-btn" onclick="addToCart('Traje HEV Mark IV', 2499, this)">+ Agregar al carrito</button>
+      </div>
+
+      <!-- Producto 4 -->
+      <div class="product-card" data-universe="re">
+        <div class="universe-tag tag-re">Resident Evil</div>
+        <div class="product-img-wrap"><span class="product-img-placeholder">🧥</span></div>
+        <div class="product-name">Chaqueta de Leon Kennedy</div>
+        <div class="product-desc">Réplica de la icónica chaqueta de cuero marrón de RE4. Cuero genuino, tallas S a XXL.</div>
+        <div class="product-footer">
+          <div class="product-price">$349.99</div>
+          <div class="stock stock-ok">En stock</div>
+        </div>
+        <button class="add-btn" onclick="addToCart('Chaqueta de Leon Kennedy', 349.99, this)">+ Agregar al carrito</button>
+      </div>
+
+      <!-- Producto 5 -->
+      <div class="product-card" data-universe="re">
+        <div class="universe-tag tag-re">Resident Evil</div>
+        <div class="product-img-wrap"><span class="product-img-placeholder">🌿</span></div>
+        <div class="product-name">Green Herb — Planta Decorativa</div>
+        <div class="product-desc">Planta artificial inspirada en el objeto más usado de RE. Maceta personalizada con logo incluida.</div>
+        <div class="product-footer">
+          <div class="product-price">$39.99</div>
+          <div class="stock stock-ok">En stock</div>
+        </div>
+        <button class="add-btn" onclick="addToCart('Green Herb Decorativa', 39.99, this)">+ Agregar al carrito</button>
+      </div>
+
+      <!-- Producto 6 -->
+      <div class="product-card" data-universe="witcher">
+        <div class="universe-tag tag-witcher">The Witcher</div>
+        <div class="product-img-wrap"><span class="product-img-placeholder">⚔️</span></div>
+        <div class="product-name">Espada de Plata de Geralt</div>
+        <div class="product-desc">Forjada a mano en acero inoxidable con grabados rúnicos. Réplica oficial de la espada anticriatura.</div>
+        <div class="product-footer">
+          <div class="product-price">$599.99</div>
+          <div class="stock stock-ok">En stock</div>
+        </div>
+        <button class="add-btn" onclick="addToCart('Espada de Plata de Geralt', 599.99, this)">+ Agregar al carrito</button>
+      </div>
+
+      <!-- Producto 7 -->
+      <div class="product-card" data-universe="zelda">
+        <div class="universe-tag tag-zelda">The Legend of Zelda</div>
+        <div class="product-img-wrap"><span class="product-img-placeholder">🛡️</span></div>
+        <div class="product-name">Escudo Hyliano</div>
+        <div class="product-desc">Réplica metálica con la Trifuerza grabada a mano. Soporte de pared incluido. 60 × 40 cm.</div>
+        <div class="product-footer">
+          <div class="product-price">$279.99</div>
+          <div class="stock stock-ok">En stock</div>
+        </div>
+        <button class="add-btn" onclick="addToCart('Escudo Hyliano', 279.99, this)">+ Agregar al carrito</button>
+      </div>
+
+      <!-- Producto 8 -->
+      <div class="product-card" data-universe="dark">
+        <div class="universe-tag tag-dark">Dark Souls</div>
+        <div class="product-img-wrap"><span class="product-img-placeholder">🏺</span></div>
+        <div class="product-name">Estus Flask — Edición Réplica</div>
+        <div class="product-desc">Vidrio soplado artesanal, tapa de cuero cosido a mano y llama LED interior de color ámbar.</div>
+        <div class="product-footer">
+          <div class="product-price">$74.99</div>
+          <div class="stock stock-ok">En stock</div>
+        </div>
+        <button class="add-btn" onclick="addToCart('Estus Flask Réplica', 74.99, this)">+ Agregar al carrito</button>
+      </div>
+
     </div>
+  </section>
+
+  <div style="height: 80px;"></div>
+</div><!-- /page-shop -->
+
+<!-- ════════ PAGE: CONTACT ════════ -->
+<div id="page-contact" class="page">
+  <div class="contact-page">
+    <h2>Contacto</h2>
+    <p>¿Tenés preguntas sobre un producto, querés realizar un pedido especial o simplemente querés hablar de gaming? Dejanos tu mensaje y te respondemos a la brevedad.</p>
+    <form class="contact-form" onsubmit="return false;">
+      <div>
+        <label for="c-name">Nombre</label>
+        <input type="text" id="c-name" placeholder="Tu nombre" />
+      </div>
+      <div>
+        <label for="c-email">Correo electrónico</label>
+        <input type="email" id="c-email" placeholder="tu@email.com" />
+      </div>
+      <div>
+        <label for="c-msg">Mensaje</label>
+        <textarea id="c-msg" placeholder="Escribí tu consulta acá..."></textarea>
+      </div>
+      <button type="submit" class="contact-submit" disabled>Enviar mensaje</button>
+      <p class="coming-soon-note">— Funcionalidad disponible próximamente —</p>
+    </form>
+  </div>
+  <div style="height: 80px;"></div>
+</div><!-- /page-contact -->
+
+<!-- CART OVERLAY & PANEL -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <span class="cart-title">Tu carrito</span>
+    <button class="cart-close" onclick="closeCart()">×</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty" id="cart-empty">Tu carrito está vacío.</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-amount" id="cart-total">$0.00</span>
+    </div>
+    <button class="checkout-btn">Proceder al checkout</button>
+  </div>
 </div>
 
-<div class="card">
-    <img src="https://via.placeholder.com/300x250" alt="Palanca de Gordon Freeman">
-    <div class="card-content">
-        <h3>Palanca de Gordon Freeman</h3>
-        <p>Réplica de colección de Half-Life.</p>
-        <p class="precio">$79.99</p>
-        <button>Agregar al carrito</button>
-    </div>
+<!-- STICKY BAR -->
+<div class="sticky-bar">
+  <div class="sticky-info">
+    Carrito: <strong id="sticky-count">0 items</strong> &mdash; <strong id="sticky-total">$0.00</strong>
+  </div>
+  <button class="sticky-open-cart" onclick="openCart()">Ver carrito</button>
 </div>
 
-<div class="card">
-    <img src="https://via.placeholder.com/300x250" alt="Chaqueta de Leon Kennedy">
-    <div class="card-content">
-        <h3>Chaqueta de Leon Kennedy</h3>
-        <p>Inspirada en Resident Evil 4.</p>
-        <p class="precio">$149.99</p>
-        <button>Agregar al carrito</button>
-    </div>
-</div>
+<script>
+  // ── STATE
+  let cart = [];
 
-<div class="card">
-    <img src="https://via.placeholder.com/300x250" alt="Casco Dragonborn">
-    <div class="card-content">
-        <h3>Casco Dragonborn</h3>
-        <p>Réplica inspirada en Skyrim.</p>
-        <p class="precio">$179.99</p>
-        <button>Agregar al carrito</button>
-    </div>
-</div>
-```
+  // ── NAVIGATION
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.getElementById('nav-' + page).classList.add('active');
+    window.scrollTo({ top: 0 });
+  }
 
-</section>
+  // ── FILTER
+  function filterProducts(universe, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.style.display = (universe === 'all' || card.dataset.universe === universe) ? 'flex' : 'none';
+    });
+  }
 
-<footer>
-    <p>Fantasy Market - Proyecto académico de Algoritmos y Estructuras de Datos</p>
-</footer>
+  // ── IMAGE UPLOAD
+  function loadProductImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const wrap = document.getElementById('main-img-wrap');
+      const placeholder = document.getElementById('main-placeholder');
+      placeholder.style.display = 'none';
+      let img = wrap.querySelector('img');
+      if (!img) {
+        img = document.createElement('img');
+        wrap.insertBefore(img, wrap.firstChild);
+      }
+      img.src = e.target.result;
+      img.alt = 'Imagen del producto';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ── CART
+  function addToCart(name, price, btn) {
+    cart.push({ name, price });
+    btn.textContent = '✓ Agregado';
+    btn.classList.add('added');
+    setTimeout(() => {
+      btn.textContent = '+ Agregar al carrito';
+      btn.classList.remove('added');
+    }, 1500);
+    renderCart();
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    renderCart();
+  }
+
+  function renderCart() {
+    const total = cart.reduce((s, i) => s + i.price, 0);
+    const count = cart.length;
+
+    document.getElementById('cart-count-nav').textContent = count;
+    document.getElementById('sticky-count').textContent = count + (count === 1 ? ' item' : ' items');
+    document.getElementById('sticky-total').textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('cart-total').textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    const container = document.getElementById('cart-items');
+    const empty = document.getElementById('cart-empty');
+    empty.style.display = count === 0 ? 'block' : 'none';
+
+    document.querySelectorAll('.cart-item').forEach(el => el.remove());
+
+    cart.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'cart-item';
+      row.innerHTML = `
+        <span class="cart-item-name">${item.name}</span>
+        <span class="cart-item-price">$${item.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+        <button class="cart-item-remove" onclick="removeFromCart(${i})" title="Eliminar">×</button>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  function openCart() {
+    document.getElementById('cart-overlay').classList.add('open');
+    document.getElementById('cart-panel').classList.add('open');
+  }
+
+  function closeCart() {
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.getElementById('cart-panel').classList.remove('open');
+  }
+</script>
 
 </body>
 </html>
