@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado Fastastico</title>
+
+```
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:Arial, sans-serif;
+    }
+
+    body{
+        background-color:#f4f4f4;
+    }
+
+    header{
+        background:#222;
+        color:white;
+        text-align:center;
+        padding:20px;
+    }
+
+    nav{
+        background:#333;
+        padding:10px;
+        text-align:center;
+    }
+
+    nav a{
+        color:white;
+        text-decoration:none;
+        margin:0 15px;
+    }
+
+    .productos{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+        gap:20px;
+        padding:30px;
+    }
+
+    .card{
+        background:white;
+        border-radius:10px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.2);
+        overflow:hidden;
+    }
+
+    .card img{
+        width:100%;
+        height:250px;
+        object-fit:cover;
+    }
+
+    .card-content{
+        padding:15px;
+    }
+
+    .card h3{
+        margin-bottom:10px;
+    }
+
+    .precio{
+        color:green;
+        font-size:1.2rem;
+        font-weight:bold;
+    }
+
+    button{
+        width:100%;
+        padding:10px;
+        margin-top:10px;
+        background:#0078d7;
+        color:white;
+        border:none;
+        cursor:pointer;
+    }
+
+    button:hover{
+        background:#005fa3;
+    }
+
+    footer{
+        background:#222;
+        color:white;
+        text-align:center;
+        padding:15px;
+        margin-top:20px;
+    }
+</style>
+```
+
+</head>
+<body>
+
+<header>
+    <h1>Fantasy Market</h1>
+    <p>Objetos legendarios de videojuegos y mundos ficticios</p>
+</header>
+
+<nav>
+    <a href="#">Inicio</a>
+    <a href="#">Productos</a>
+    <a href="#">Ofertas</a>
+    <a href="#">Contacto</a>
+</nav>
+
+<section class="productos">
+
+```
+<div class="card">
+    <img src="https://via.placeholder.com/300x250" alt="Boina de Bill">
+    <div class="card-content">
+        <h3>Boina de Bill</h3>
+        <p>Accesorio inspirado en Left 4 Dead.</p>
+        <p class="precio">$49.99</p>
+        <button>Agregar al carrito</button>
+    </div>
+</div>
+
+<div class="card">
+    <img src="https://via.placeholder.com/300x250" alt="Palanca de Gordon Freeman">
+    <div class="card-content">
+        <h3>Palanca de Gordon Freeman</h3>
+        <p>Réplica de colección de Half-Life.</p>
+        <p class="precio">$79.99</p>
+        <button>Agregar al carrito</button>
+    </div>
+</div>
+
+<div class="card">
+    <img src="https://via.placeholder.com/300x250" alt="Chaqueta de Leon Kennedy">
+    <div class="card-content">
+        <h3>Chaqueta de Leon Kennedy</h3>
+        <p>Inspirada en Resident Evil 4.</p>
+        <p class="precio">$149.99</p>
+        <button>Agregar al carrito</button>
+    </div>
+</div>
+
+<div class="card">
+    <img src="https://via.placeholder.com/300x250" alt="Casco Dragonborn">
+    <div class="card-content">
+        <h3>Casco Dragonborn</h3>
+        <p>Réplica inspirada en Skyrim.</p>
+        <p class="precio">$179.99</p>
+        <button>Agregar al carrito</button>
+    </div>
+</div>
+```
+
+</section>
+
+<footer>
+    <p>Fantasy Market - Proyecto académico de Algoritmos y Estructuras de Datos</p>
+</footer>
+
+</body>
+</html>
